@@ -10,7 +10,7 @@ services:
     environment:
       - ENCRYPT_KEY_FILE=/run/secrets/encrypt_key
     volumes:
-      - ./secrets/config-server/encrypt_key:/run/secrets/encrypt_key
+      - ./secrets/dev/config-server/encrypt_key:/run/secrets/encrypt_key
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 2s
@@ -24,7 +24,6 @@ services:
     ports:
       - 8080:8080
     environment:
-      - POSTGRES_URL=jdbc:postgresql://postgres/ostock
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CLOUD_CONFIG_URI=http://config-server:8071
     volumes:
@@ -40,11 +39,16 @@ services:
     restart: always
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_USER_FILE=/run/secrets/postgres/user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres/password
+      - POSTGRES_DB_FILE=/run/secrets/postgres/db
     shm_size: 128mb
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./secrets/databases/postgres/:/run/secrets/postgres/
-      - ../postgres/scripts:/docker-entrypoint-initdb.d
+      - ./secrets/dev/postgres/:/run/secrets/postgres/
+      - ../postgres/scripts/dev/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ../postgres/scripts/dev/data.sql:/docker-entrypoint-initdb.d/2-data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$(cat /run/secrets/postgres/user)\""]
       interval: 10s
