@@ -7,6 +7,16 @@ services:
       target: run
     ports:
       - 8071:8071
+    environment:
+      - ENCRYPT_KEY_FILE=/run/secrets/encrypt_key
+    volumes:
+      - ./secrets/config-server/encrypt_key:/run/secrets/encrypt_key
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 2s
+      timeout: 3s
+      retries: 5
+      start_period: 2s
   licensing-service:
     build:
       context: ../licensing-service
@@ -20,8 +30,10 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - config-server
-      - postgres
+      config-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
   postgres:
     build:
       context: ../postgres
@@ -33,6 +45,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./secrets/databases/postgres/:/run/secrets/postgres/
       - ../postgres/scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$(cat /run/secrets/postgres/user)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   adminer:
     image: adminer:4.8.1
     restart: always
