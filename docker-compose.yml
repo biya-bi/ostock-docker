@@ -9,8 +9,14 @@ services:
       - 8071:8071
     environment:
       - ENCRYPT_KEY_FILE=/run/secrets/encrypt_key
+      - GIT_USERNAME_FILE=/run/secrets/git/username
+      - GIT_PASSWORD_FILE=/run/secrets/git/password
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/biya-bi/ostock-configs
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCHPATHS=licensing-service
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULTLABEL=main
     volumes:
       - ./secrets/dev/config-server/encrypt_key:/run/secrets/encrypt_key
+      - ./secrets/dev/git/:/run/secrets/git/
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 2s
