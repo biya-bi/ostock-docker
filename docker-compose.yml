@@ -23,6 +23,20 @@ services:
       timeout: 3s
       retries: 5
       start_period: 2s
+  eureka-service:
+    build:
+      context: ../eureka-service
+      target: run
+    ports:
+      - 8070:8070
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8071
+    volumes:
+      - ./:/app
+    depends_on:
+      config-server:
+        condition: service_healthy
   licensing-service:
     build:
       context: ../licensing-service
