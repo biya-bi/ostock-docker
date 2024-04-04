@@ -1,9 +1,9 @@
 version: '3.8'
 name: ostock
 services:
-  config-server:
+  config-service:
     build:
-      context: ../config-server
+      context: ../config-service
       target: run
     ports:
       - 8071:8071
@@ -15,7 +15,7 @@ services:
       - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCHPATHS=*
       - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULTLABEL=main
     volumes:
-      - ./secrets/dev/config-server/encrypt_key:/run/secrets/encrypt_key
+      - ./secrets/dev/config-service/encrypt_key:/run/secrets/encrypt_key
       - ./secrets/dev/git/:/run/secrets/git/
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
@@ -31,11 +31,11 @@ services:
       - 8070:8070
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8071
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
     volumes:
       - ./:/app
     depends_on:
-      config-server:
+      config-service:
         condition: service_healthy
   licensing-service:
     build:
@@ -45,11 +45,11 @@ services:
       - 8080:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8071
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
     volumes:
       - ./:/app
     depends_on:
-      config-server:
+      config-service:
         condition: service_healthy
       postgres:
         condition: service_healthy
