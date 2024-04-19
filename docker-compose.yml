@@ -41,8 +41,6 @@ services:
     build:
       context: ../licensing-service
       target: run
-    ports:
-      - 8080:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
@@ -58,8 +56,6 @@ services:
     build:
       context: ../organization-service
       target: run
-    ports:
-      - 9090:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
@@ -103,7 +99,7 @@ services:
       context: ../gateway-service
       target: run
     ports:
-      - 7070:8080
+      - 8072:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
