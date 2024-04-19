@@ -98,5 +98,20 @@ services:
     restart: always
     ports:
       - 9080:8080
+  gateway-service:
+    build:
+      context: ../gateway-service
+      target: run
+    ports:
+      - 7070:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
+      - EUREKA_URI=http://eureka-service:8070/eureka
+    volumes:
+      - ./:/app
+    depends_on:
+      config-service:
+        condition: service_healthy
 volumes:
   postgres_data:
