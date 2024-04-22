@@ -1,6 +1,9 @@
 version: '3.8'
 name: ostock
 services:
+  maven:
+    build:
+      context: ../maven
   config-service:
     build:
       context: ../config-service
