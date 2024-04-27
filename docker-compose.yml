@@ -1,9 +1,9 @@
 version: '3.8'
 name: ostock
 services:
-  maven:
+  17-jdk-jammy-maven:
     build:
-      context: ../maven
+      context: ../17-jdk-jammy-maven
   config-service:
     build:
       context: ../config-service
