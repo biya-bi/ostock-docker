@@ -10,7 +10,7 @@ services:
       target: run
     restart: always
     ports:
-      - 8071:8071
+      - 8071:8080
     environment:
       - ENCRYPT_KEY_FILE=/run/secrets/encrypt_key
       - GIT_USERNAME_FILE=/run/secrets/git/username
@@ -22,7 +22,7 @@ services:
       - ./secrets/dev/config-service/encrypt_key:/run/secrets/encrypt_key
       - ./secrets/dev/git/:/run/secrets/git/
     healthcheck:
-      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
       interval: 2s
       timeout: 3s
       retries: 5
@@ -32,11 +32,11 @@ services:
       context: ../eureka-service
       target: run
     ports:
-      - 8070:8070
+      - 8070:8080
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8080
     volumes:
       - ./:/app
     depends_on:
@@ -49,8 +49,8 @@ services:
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
-      - EUREKA_URI=http://eureka-service:8070/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8080
+      - EUREKA_URI=http://eureka-service:8080/eureka
       - JWT_ISSUER_URI_FILE=/run/secrets/env/jwt_issuer_uri
     volumes:
       - ./:/app
@@ -67,8 +67,8 @@ services:
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
-      - EUREKA_URI=http://eureka-service:8070/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8080
+      - EUREKA_URI=http://eureka-service:8080/eureka
       - JWT_ISSUER_URI_FILE=/run/secrets/env/jwt_issuer_uri
     volumes:
       - ./:/app
@@ -112,8 +112,8 @@ services:
       - 8072:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
-      - EUREKA_URI=http://eureka-service:8070/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8080
+      - EUREKA_URI=http://eureka-service:8080/eureka
     volumes:
       - ./:/app
     depends_on:
