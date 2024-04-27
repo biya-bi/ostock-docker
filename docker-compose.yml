@@ -18,6 +18,10 @@ services:
       - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/biya-bi/ostock-configs
       - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCHPATHS=*
       - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULTLABEL=main
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_REGION=default
+      - EUREKA_CLIENT_AVAILABILITYZONES_DEFAULT=default
+      - EUREKA_CLIENT_SERVICEURL_DEFAULT=http://eureka-service:8080/eureka
     volumes:
       - ./secrets/dev/config-service/encrypt_key:/run/secrets/encrypt_key
       - ./secrets/dev/git/:/run/secrets/git/
