@@ -51,8 +51,10 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
       - EUREKA_URI=http://eureka-service:8070/eureka
+      - JWT_ISSUER_URI_FILE=/run/secrets/env/jwt_issuer_uri
     volumes:
       - ./:/app
+      - ./secrets/dev/env/:/run/secrets/env/
     depends_on:
       config-service:
         condition: service_healthy
@@ -67,8 +69,10 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8071
       - EUREKA_URI=http://eureka-service:8070/eureka
+      - JWT_ISSUER_URI_FILE=/run/secrets/env/jwt_issuer_uri
     volumes:
       - ./:/app
+      - ./secrets/dev/env/:/run/secrets/env/
     depends_on:
       config-service:
         condition: service_healthy
