@@ -140,6 +140,7 @@ services:
       - JWT_ISSUER_URI_FILE=/run/secrets/keycloak/jwt_issuer_uri
       - VAPID_PRIVATE_KEY_FILE=/run/secrets/vapid/private_key
       - VAPID_PUBLIC_KEY_FILE=/run/secrets/vapid/public_key
+      - VAPID_SUBJECT_FILE=/run/secrets/vapid/subject
     volumes:
       - ./:/app
       - ./secrets/dev/keycloak/:/run/secrets/keycloak/
