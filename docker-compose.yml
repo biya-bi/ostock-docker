@@ -95,7 +95,7 @@ services:
       - ../postgres/scripts/dev/init.sql:/docker-entrypoint-initdb.d/1-init.sql
       - ../postgres/scripts/dev/data.sql:/docker-entrypoint-initdb.d/2-data.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U \"$(cat /run/secrets/postgres/user)\""]
+      test: ["CMD-SHELL", "pg_isready -U \"$(cat /run/secrets/postgres/user)\" -d \"$(cat /run/secrets/postgres/db)\""]
       interval: 10s
       timeout: 5s
       retries: 5
